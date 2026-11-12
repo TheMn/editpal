@@ -1,0 +1,6 @@
+{
+  "$comment": "Every upstream thing editpal depends on, with the day it was last checked against its source. ./pal doctor flags entries older than 30 days: re-read the upstream release notes, update the pin and anything that depends on it, run ./pal test, then set the new date.",
+  "checked": {
+    "hyperframes": { "pin": "0.9.31", "date": "2026-11-12", "source": "https://github.com/heygen-com/hyperframes/releases" }
+  }
+}

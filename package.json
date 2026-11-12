@@ -1,0 +1,13 @@
+{
+  "name": "editpal",
+  "private": true,
+  "type": "module",
+  "description": "A video studio run by Claude Code: script, edit, dub, subtitles, graphics, Shorts, packaging",
+  "scripts": {
+    "setup": "sh tools/setup.sh"
+  },
+  "dependencies": {
+    "gsap": "3.15.0",
+    "hyperframes": "0.9.31"
+  }
+}

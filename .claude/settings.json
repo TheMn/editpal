@@ -1,0 +1,28 @@
+{
+  "env": {
+    "DO_NOT_TRACK": "1",
+    "HYPERFRAMES_NO_TELEMETRY": "1",
+    "HYPERFRAMES_NO_UPDATE_CHECK": "1",
+    "HYPERFRAMES_NO_AUTO_INSTALL": "1",
+    "HYPERFRAMES_SKIP_SKILLS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(./pal:*)",
+      "Bash(sh tools/setup.sh:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(ffprobe:*)"
+    ],
+    "deny": [
+      "Bash(npx hyperframes auth:*)",
+      "Bash(npx hyperframes cloud:*)",
+      "Bash(npx hyperframes lambda:*)",
+      "Bash(npx hyperframes cloudrun:*)",
+      "Bash(npx hyperframes publish:*)",
+      "Bash(npx hyperframes feedback:*)",
+      "Bash(npx hyperframes events:*)",
+      "Bash(npx hyperframes upgrade:*)",
+      "Bash(npx hyperframes media-use generate:*)"
+    ]
+  }
+}

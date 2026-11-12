@@ -1,0 +1,4 @@
+# Main environment (.venv). Exact pins; change one on purpose, then run ./pal test.
+numpy==2.3.4
+soundfile==0.13.1
+requests==2.32.5

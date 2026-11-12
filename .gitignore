@@ -1,0 +1,22 @@
+node_modules/
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.hyperframes/
+# media never goes in git: it lives in Drive and in each episode's build/
+episodes/*/build/
+episodes/*/hf/assets/
+episodes/*/hf/renders/
+tests/build/
+voices/*/test/
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.wav
+*.m4a
+*.mp3
+!library/sfx/*.mp3
+*.part
+.DS_Store
