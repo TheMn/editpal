@@ -1,0 +1,47 @@
+<template>
+  <style>
+    /*BRAND*/
+    #root { position: absolute; inset: 0; font-family: var(--font-text); }
+    #{{id}}-plane { position: absolute; inset: 0; background: var(--c-accent); }
+    #{{id}}-in { position: absolute; inset-inline: calc(var(--w) * var(--margin)); top: 0; bottom: 0; display: flex;
+      flex-direction: column; justify-content: center; gap: calc(var(--u) * 2.6); color: var(--c-accent-ink); }
+    #{{id}}-kick { font-size: calc(var(--u) * var(--s-body)); font-weight: var(--display-weight); letter-spacing: 0.01em; display: flex;
+      align-items: center; gap: calc(var(--u) * 1.6); }
+    #{{id}}-kick i { display: block; width: calc(var(--u) * 7); height: calc(var(--u) * 0.9); background: var(--c-accent-ink); }
+    #{{id}}-title { font-size: calc(var(--u) * var(--s-display)); font-weight: var(--display-weight); line-height: var(--lh);
+      letter-spacing: var(--tracking); max-width: calc(var(--w) * 78); text-wrap: balance; }
+    #{{id}}-title .wd { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="{{id}}" data-width="{{W}}" data-height="{{H}}" lang="{{lang}}" dir="{{dir}}"
+       data-composition-variables='[{"id":"kicker","type":"string","label":"Kicker","default":"Chapter 1"},{"id":"title","type":"string","label":"Title","default":"The title of the chapter"},{"id":"wipe","type":"number","label":"Wipe in and out (1) or start full (0)","default":1}]'>
+    <div id="{{id}}-plane" class="clip" data-start="0" data-duration="{{dur}}">
+      <div id="{{id}}-in">
+        <div id="{{id}}-kick"><i></i><span id="{{id}}-ktxt" data-var-text="kicker"></span></div>
+        <div id="{{id}}-title"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const D = {{dur}}, S = "{{dir}}" === "rtl" ? -1 : 1, id = "{{id}}";
+      const v = Object.assign({ kicker: "", title: "Title", wipe: 1 }, window.__hyperframes.getVariables());
+      document.getElementById(id + "-ktxt").textContent = v.kicker;
+      if (!v.kicker) document.getElementById(id + "-kick").style.display = "none";
+      const t = document.getElementById(id + "-title");
+      v.title.split(/\s+/).forEach(function (w, i, a) {
+        const s = document.createElement("span"); s.className = "wd"; s.textContent = w; t.appendChild(s);
+        if (i < a.length - 1) t.appendChild(document.createTextNode(" "));
+      });
+      const tl = gsap.timeline({ paused: true });
+      const ein = "{{ease_in}}", eout = "{{ease_out}}", en = {{enter}}, ex = {{exit}}, st = {{stagger}};
+      const hid = S > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)";
+      const full = +v.wipe === 0;
+      if (!full) tl.fromTo("#" + id + "-plane", { clipPath: hid }, { clipPath: "inset(0 0 0 0)", duration: en + 0.1, ease: "power3.inOut" }, 0);
+      const t0 = full ? 0.1 : 0.35;
+      tl.fromTo("#" + id + "-kick", { opacity: 0, x: -40 * S }, { opacity: 1, x: 0, duration: en, ease: ein }, t0);
+      tl.fromTo("#" + id + "-title .wd", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: en, ease: ein, stagger: st }, t0 + 0.1);
+      if (!full) tl.to("#" + id + "-plane", { clipPath: S > 0 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)", duration: ex + 0.1, ease: "power3.inOut" }, D - ex - 0.15);
+      window.__timelines[id] = tl;
+    })();
+  </script>
+</template>

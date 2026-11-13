@@ -20,3 +20,7 @@ voices/*/test/
 !library/sfx/*.mp3
 *.part
 .DS_Store
+# generated inside an episode's HyperFrames project
+episodes/*/hf/solo/
+episodes/*/hf/.seq/
+brand/reference/test*.mp4

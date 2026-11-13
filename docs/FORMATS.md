@@ -72,6 +72,11 @@ All times are seconds. Times in `edit.json` and `plan.json` sit on the project's
   start to the end of the recording.
 - `conform` files are constant frame rate at the project `fps`, SDR, upright, with a keyframe
   every second; everything downstream reads them, never `file`.
+- `ingest` also records, per source: `wav` (its sound as 48 kHz mono, when it has any), `sheet`
+  (its contact sheet), `sha` (a hash of the original, for caching). Offsets are measured against
+  the master's own sound.
+- A second talking video nearly as long as the master is taken as another camera (`a-roll`),
+  not as B-roll.
 - A generated video has `"master": null` and no `a-roll`.
 
 ### `transcript.raw.json` / `transcript.json`

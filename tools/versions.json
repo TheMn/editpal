@@ -1,6 +1,46 @@
 {
-  "$comment": "Every upstream thing editpal depends on, with the day it was last checked against its source. ./pal doctor flags entries older than 30 days: re-read the upstream release notes, update the pin and anything that depends on it, run ./pal test, then set the new date.",
-  "checked": {
-    "hyperframes": { "pin": "0.9.31", "date": "2026-11-12", "source": "https://github.com/heygen-com/hyperframes/releases" }
+ "$comment": "Every upstream thing editpal depends on, with the day it was last checked against its source. ./pal doctor flags entries older than 30 days: re-read the upstream release notes, update the pin and anything that depends on it, run ./pal test, then set the new date.",
+ "checked": {
+  "hyperframes": {
+   "pin": "0.9.31",
+   "date": "2026-11-12",
+   "source": "https://github.com/heygen-com/hyperframes/releases"
+  },
+  "faster-whisper": {
+   "pin": "1.2.1",
+   "date": "2026-11-13",
+   "source": "https://github.com/SYSTRAN/faster-whisper/releases"
+  },
+  "whisper-large-v3": {
+   "pin": "Systran/faster-whisper-large-v3@edaa852",
+   "date": "2026-11-13",
+   "source": "https://huggingface.co/Systran/faster-whisper-large-v3"
+  },
+  "chatterbox-nano": {
+   "pin": "ResembleAI/chatterbox-nano@71ccd1d; code resemble-ai/chatterbox@ab55923",
+   "date": "2026-11-13",
+   "source": "https://github.com/resemble-ai/chatterbox",
+   "note": "upstream is marked retired; the pinned commit keeps working. Look for a maintained successor at each check."
+  },
+  "moss-tts-nano": {
+   "pin": "OpenMOSS-Team/MOSS-TTS-Nano-100M-ONNX@f52645c",
+   "date": "2026-11-13",
+   "source": "https://github.com/OpenMOSS/MOSS-TTS-Nano"
+  },
+  "kokoro": {
+   "pin": "onnx-community/Kokoro-82M-v1.0-ONNX",
+   "date": "2026-11-13",
+   "source": "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX"
+  },
+  "opencv": {
+   "pin": "opencv-python-headless 4.13.0.92",
+   "date": "2026-11-13",
+   "source": "https://github.com/opencv/opencv-python/releases"
+  },
+  "gdown": {
+   "pin": "5.2.0",
+   "date": "2026-11-13",
+   "source": "https://github.com/wkentaro/gdown/releases"
   }
+ }
 }

@@ -1,0 +1,42 @@
+<template>
+  <style>
+    /*BRAND*/
+    #root { position: absolute; inset: 0; font-family: var(--font-text); }
+    #{{id}}-bg { position: absolute; inset: 0; background: var(--c-ground); }
+    #{{id}}-in { position: absolute; inset-inline-start: calc(var(--w) * var(--margin)); inset-inline-end: calc(var(--w) * 34); top: 0; bottom: 0;
+      display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u) * 4); color: var(--c-ink); }
+    #{{id}}-title { font-size: calc(var(--u) * var(--s-headline) * 0.82); font-weight: var(--display-weight); line-height: var(--lh); letter-spacing: var(--tracking);
+      padding-bottom: calc(var(--u) * 2); border-bottom: calc(var(--u) * 0.7) solid var(--c-accent); align-self: flex-start; }
+    #{{id}}-pts { display: flex; flex-direction: column; gap: calc(var(--u) * 2.6); }
+    .{{id}}-pt { display: flex; align-items: baseline; gap: calc(var(--u) * 2.4); font-size: calc(var(--u) * var(--s-headline) * 0.7); font-weight: var(--text-weight); line-height: 1.2; }
+    .{{id}}-pt b { flex: none; display: block; width: calc(var(--u) * 1.8); height: calc(var(--u) * 1.8); background: var(--c-accent); transform: translateY(calc(var(--u) * 0.15)); }
+  </style>
+  <div id="root" data-composition-id="{{id}}" data-width="{{W}}" data-height="{{H}}" lang="{{lang}}" dir="{{dir}}"
+       data-composition-variables='[{"id":"title","type":"string","label":"Title","default":"Three things to know"},{"id":"items","type":"string","label":"Points (up to 4, JSON list)","default":"[\"First point\",\"Second point\",\"Third point\"]"}]'>
+    <div id="{{id}}-bg" class="clip" data-start="0" data-duration="{{dur}}">
+      <div id="{{id}}-in">
+        <div id="{{id}}-title" data-var-text="title"></div>
+        <div id="{{id}}-pts"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const D = {{dur}}, S = "{{dir}}" === "rtl" ? -1 : 1, id = "{{id}}";
+      const v = Object.assign({ title: "", items: ["First point"] }, window.__hyperframes.getVariables());
+      let items = v.items; if (typeof items === "string") { try { items = JSON.parse(items); } catch (e) { items = [items]; } }
+      items = items.slice(0, 4);
+      const ti = document.getElementById(id + "-title"); ti.textContent = v.title; if (!v.title) ti.style.display = "none";
+      const pts = document.getElementById(id + "-pts");
+      items.forEach(function (s) { const d = document.createElement("div"); d.className = id + "-pt"; const b = document.createElement("b"); const t = document.createElement("span"); t.textContent = s; d.appendChild(b); d.appendChild(t); pts.appendChild(d); });
+      const tl = gsap.timeline({ paused: true });
+      const ein = "{{ease_in}}", eout = "{{ease_out}}", en = {{enter}}, ex = {{exit}};
+      tl.fromTo("#" + id + "-bg", { clipPath: S > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)", duration: en, ease: "power3.inOut" }, 0);
+      tl.fromTo("#" + id + "-title", { opacity: 0, x: -30 * S }, { opacity: 1, x: 0, duration: en, ease: ein }, 0.3);
+      const n = items.length, span = Math.max(0.2, Math.min(1.2, (D - 1.6) / Math.max(n, 1)));
+      items.forEach(function (_, i) { tl.fromTo("." + id + "-pt:nth-child(" + (i + 1) + ")", { opacity: 0, x: -40 * S }, { opacity: 1, x: 0, duration: en, ease: ein }, 0.7 + i * span); });
+      tl.to("#" + id + "-bg", { clipPath: S > 0 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)", duration: ex + 0.1, ease: "power3.inOut" }, D - ex - 0.15);
+      window.__timelines[id] = tl;
+    })();
+  </script>
+</template>

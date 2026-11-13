@@ -1,1 +1,64 @@
-{}
+{
+  "transcribe": {
+    "about": "Words with times in any spoken language: Whisper large-v3 converted for faster-whisper (CTranslate2, int8 on CPU).",
+    "repo": "Systran/faster-whisper-large-v3",
+    "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+    "dir": "faster-whisper-large-v3",
+    "files": ["config.json", "preprocessor_config.json", "tokenizer.json", "vocabulary.json", "README.md", "model.bin"],
+    "license": "MIT"
+  },
+  "transcribe-quick": {
+    "about": "Fast draft transcription (--quick): Whisper small, multilingual, converted for faster-whisper.",
+    "repo": "Systran/faster-whisper-small",
+    "revision": "536b0662742c02347bc0e980a01041f333bce120",
+    "dir": "faster-whisper-small",
+    "files": ["config.json", "tokenizer.json", "vocabulary.txt", "README.md", "model.bin"],
+    "license": "MIT"
+  },
+  "voice-chatterbox-nano": {
+    "about": "English voice cloning from a 6-10 s clip: Chatterbox Nano (110M), the small one meant for CPUs.",
+    "repo": "ResembleAI/chatterbox-nano",
+    "revision": "71ccd1d0081b430592cea481f4307e764e07bc64",
+    "dir": "chatterbox-nano",
+    "files": ["ve.safetensors", "t3_nano_v1.safetensors", "s3gen_meanflow.safetensors", "t3_nano_v1.yaml",
+              "added_tokens.json", "merges.txt", "special_tokens_map.json", "tokenizer_config.json", "vocab.json", "README.md"],
+    "license": "MIT"
+  },
+  "voice-moss-nano": {
+    "about": "Voice cloning in 20 languages including Persian and English: MOSS-TTS-Nano (100M), ONNX on CPU, with its audio codec.",
+    "tts": {
+      "repo": "OpenMOSS-Team/MOSS-TTS-Nano-100M-ONNX",
+      "revision": "f52645cb467506d8e18e746ddd59482685b74e58",
+      "dir": "moss-nano/MOSS-TTS-Nano-100M-ONNX",
+      "files": ["browser_poc_manifest.json", "moss_tts_decode_step.onnx", "moss_tts_global_shared.data",
+                "moss_tts_local_cached_step.onnx", "moss_tts_local_decoder.onnx", "moss_tts_local_fixed_sampled_frame.onnx",
+                "moss_tts_local_shared.data", "moss_tts_prefill.onnx", "tokenizer.model", "tts_browser_onnx_meta.json", "README.md"]
+    },
+    "codec": {
+      "repo": "OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX",
+      "revision": "ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae",
+      "dir": "moss-nano/MOSS-Audio-Tokenizer-Nano-ONNX",
+      "files": ["codec_browser_onnx_meta.json", "moss_audio_tokenizer_decode_full.onnx", "moss_audio_tokenizer_decode_shared.data",
+                "moss_audio_tokenizer_decode_step.onnx", "moss_audio_tokenizer_encode.data", "moss_audio_tokenizer_encode.onnx", "README.md"]
+    },
+    "license": "Apache-2.0"
+  },
+  "voice-kokoro": {
+    "about": "Stock English voices without cloning: Kokoro 82M, ONNX (fp32), with a handful of voices.",
+    "repo": "onnx-community/Kokoro-82M-v1.0-ONNX",
+    "revision": "1939ad2a8e416c0acfeecc08a694d14ef25f2231",
+    "dir": "kokoro",
+    "files": ["onnx/model.onnx", "tokenizer.json", "config.json", "README.md",
+              "voices/af_heart.bin", "voices/af_bella.bin", "voices/af_nicole.bin", "voices/am_adam.bin",
+              "voices/am_michael.bin", "voices/bf_emma.bin", "voices/bm_george.bin", "voices/bm_lewis.bin"],
+    "license": "Apache-2.0"
+  },
+  "face-yunet": {
+    "about": "Face detector for ./pal reframe and ./pal thumb: YuNet (OpenCV Zoo), ONNX, a few hundred kB.",
+    "repo": "opencv/face_detection_yunet",
+    "revision": "3cc26e7f1014a5ee5d74a42acee58bafc9d0a310",
+    "dir": "face-yunet",
+    "files": ["face_detection_yunet_2023mar.onnx", "LICENSE"],
+    "license": "MIT"
+  }
+}

@@ -1,0 +1,3 @@
+# Media tools (.venv). Exact pins; change one on purpose, then run ./pal test.
+faster-whisper==1.2.1   # MIT: Whisper transcription (CTranslate2); brings onnxruntime for the Silero VAD
+gdown==5.2.0            # MIT: lists a public Google Drive folder without a login
