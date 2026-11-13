@@ -282,6 +282,7 @@ def cmd_put(argv):
     ap.add_argument("files", nargs="+")
     a = ap.parse_args(argv)
     ep = C.episode(a.ep)
+    a.files = [C.resolve(ep, p) for p in a.files]
     for p in a.files:
         if not os.path.isfile(p):
             C.die(f"{p} is not a file", 2)

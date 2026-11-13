@@ -11,7 +11,7 @@ The storyboard is approved. Build exactly that.
 4. **Draft.** `./pal composite <ep> --draft` (1080p, timecode and beat ids burned in), then
    `./pal qc build/out/draft.mp4 --ep <ep>`. Fix what it finds before anyone watches: a flash
    frame, a black gap, clipping, loudness off target. Make a contact sheet of the draft
-   (`./pal sheet contact build/out/draft.mp4 -o build/review/draft-sheet.jpg --every 10`) and give
+   (`./pal sheet contact <ep>/build/out/draft.mp4 -o <ep>/build/review/draft-sheet.jpg --every 10`) and give
    it with the plan to a `fresh-eyes` subagent; fix its real findings.
 5. **Gate 5: the draft.** `./pal drive put <ep> build/out/draft.mp4`,
    `./pal board draft <ep>`, show the link and the page. Say what the checks measured and what

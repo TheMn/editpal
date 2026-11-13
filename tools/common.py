@@ -80,6 +80,14 @@ def rel(ep, path):
     return os.path.relpath(path, ep)
 
 
+def resolve(ep, path):
+    """A file named in a command: as given, else relative to the episode folder (build/out/draft.mp4)."""
+    if os.path.exists(path):
+        return path
+    alt = os.path.join(ep, path)
+    return alt if os.path.exists(alt) else path
+
+
 def run(cmd, quiet=True, **kw):
     """Run a command (list). ffmpeg/ffprobe get -v error and -y. Dies with the tool's own message."""
     cmd = [str(c) for c in cmd]

@@ -10,3 +10,6 @@ Used by the `package` skill.
 python3 tools/vendor/youtube-agent-skill/title.py --title "…" --thumb "…"
 python3 tools/vendor/youtube-agent-skill/chapters.py subs/en.srt --target 8
 ```
+
+`chapters.py` imports `load` and `parse_ts` from the upstream `yt-edit/deadair.py`, which is not copied
+here; `tools/vendor/yt-edit/deadair.py` is a small replacement written for editpal (srt, vtt, json).

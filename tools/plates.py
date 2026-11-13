@@ -1,7 +1,7 @@
 """Graphics plates: short HyperFrames clips laid over the A-cut (or one whole generated piece).
 
     ./pal plates time <ep>                       recompute every beat's time from its word anchors
-    ./pal plates stills <ep> [--lang en]         pose every beat on the real frame -> build/review/stills/
+    ./pal plates stills <ep> [--lang en] [--only B03,B04]       pose every beat on the real frame -> build/review/stills/
     ./pal plates render <ep> [--only P03,P07] [--draft] [--lang en] [--range 0-30]
     ./pal plates kit <name> --vars '{"name":"Ana"}' [--alpha] [--lang fa] [--dur 5] -o out.mov
     ./pal plates kits                            list the kit pieces and their variables
@@ -313,7 +313,7 @@ EXCLUSIVE = {"full", "pip", "split", "card", "b-roll"}
 def graphics_langs(a_lang):
     """Languages to render: --lang, else channel languages.graphics (per-language: every language)."""
     if a_lang:
-        return [a_lang]
+        return [x for x in a_lang.split(",") if x]
     ch = common.channel().get("languages", {})
     g = ch.get("graphics", "en")
     if g != "per-language":
@@ -455,15 +455,18 @@ def project_for(ep):
 def cmd_stills(argv):
     """plates stills <ep>: every beat posed over the real frame, snapshotted in one run."""
     ap = argparse.ArgumentParser(prog="plates stills")
-    ap.add_argument("ep"); ap.add_argument("--lang", default=None)
+    ap.add_argument("ep"); ap.add_argument("--lang", default=None); ap.add_argument("--only", default="")
     a = ap.parse_args(argv)
     ep = common.episode(a.ep)
     lang = graphics_langs(a.lang)[0]
+    only = {x.strip().upper() for x in a.only.split(",") if x.strip()}
     plan = load_plan(ep)
     proj, b, _, W, H, fps = project_for(ep)
     base = prepare_base(ep, proj, fps)
     hosts, ats, names, end = [], [], [], 0.0
     for beat in plate_beats(plan):
+        if only and beat["id"].upper() not in only and beat["plate"]["id"].upper() not in only:
+            continue
         if not beat.get("t"):
             common.die(f"beat {beat['id']} has no time: run ./pal plates time {os.path.basename(ep)}", 3)
         cid, dur, vals, _ = instantiate(ep, proj, beat, lang, b, W, H, base)

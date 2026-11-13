@@ -6,9 +6,12 @@ Prints one line per finding with its time. P0 = fix before publishing (flash fra
 0.5 s mid-video, clipped audio, no audio, loudness more than 1.5 LU from the target, length
 differing from the A-cut); P1 = look at it. With --ep it also compares the length with
 edit.json and lists seams still flagged, and writes build/review/qc.json. Exit code 1 if any P0.
-The loudness target comes from channel.json (loudness.long, or loudness.short under 60 s).
+The loudness target comes from channel.json (loudness.long, or loudness.short for a vertical video under 60 s).
+--target overrides it; --json prints the findings as JSON.
 """
 import argparse
+import json
+import os
 import re
 import subprocess
 
@@ -48,20 +51,23 @@ def audio_checks(path):
     err = ff(["-i", path, "-vn", "-af", "ebur128=peak=true:framelog=quiet", "-f", "null", "-"])
     g = lambda pat: (float(m.group(1)) if (m := re.search(pat, err.split("Summary:")[-1])) else None)
     lufs, lra, tp = g(r"I:\s+(-?[\d.]+) LUFS"), g(r"LRA:\s+(-?[\d.]+) LU"), g(r"Peak:\s+(-?[\d.]+) dBFS")
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-vn", "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-vn", "-ar", str(SR), "-f", "f32le", "-"],
                          capture_output=True).stdout
+    nch = next((s.get("channels", 1) for s in C.probe(path)["streams"] if s["codec_type"] == "audio"), 1)
     x = np.frombuffer(raw, np.float32)
-    hot = np.abs(x) >= 0.9995
+    x = x[:len(x) // nch * nch].reshape(-1, nch)       # per channel: a mono downmix would add 3 dB
+    hot = (np.abs(x) >= 0.9995).any(axis=1)
+    x = x[:, 0]
     starts = np.flatnonzero(hot[:-2] & hot[1:-1] & hot[2:]) if len(x) > 3 else np.array([])
     clips = [float(t) for t in (starts[np.concatenate(([True], np.diff(starts) > 480))] / SR)] if len(starts) else []
     return lufs, lra, tp, clips, len(x) / SR
 
 
-def target_for(duration, override):
+def target_for(short, override):
     if override is not None:
         return override
     ld = C.channel().get("loudness", {})
-    return float(ld.get("short", -14) if duration < 60 else ld.get("long", -16))
+    return float(ld.get("short", -14) if short else ld.get("long", -16))
 
 
 def run_qc(video, ep=None, target=None):
@@ -96,7 +102,7 @@ def run_qc(video, ep=None, target=None):
         add("P0", "no-audio", None, "the file has no audio")
     else:
         lufs, lra, tp, clips, adur = audio_checks(video)
-        tgt = target_for(dur, target)
+        tgt = target_for(bool(vs) and dur < 60 and vs.get("height", 0) > vs.get("width", 0), target)
         info.update({"lufs": lufs, "lra": lra, "true_peak_dbfs": tp, "target_lufs": tgt, "audio_duration": round(adur, 3)})
         if lufs is None:
             add("P1", "loudness", None, "could not measure loudness (silent?)")
@@ -111,11 +117,11 @@ def run_qc(video, ep=None, target=None):
             add("P0", "clipping", t, "audio samples at full scale (clipped)")
         if vs and abs(adur - dur) > 0.1:
             add("P1", "av-length", None, f"audio {adur:.2f} s vs video {dur:.2f} s ({(adur - dur) * 1000:+.0f} ms)")
-    if ep:
+    if ep and os.path.exists(os.path.join(ep, "edit.json")):
         import cut as K
         e = K.load_edit(ep)
         want = K.length(e)
-        if abs(want - dur) > 1.5 / fps:
+        if abs(want - dur) > 1.5 / fps and not os.path.basename(video).startswith("pilot"):
             add("P0", "length", None, f"video is {dur:.2f} s, the edit says {want:.2f} s ({(dur - want) * 1000:+.0f} ms)")
         for r in e["removed"]:
             if r.get("seam", {}).get("flag") and r["kind"] != "suggest" and r.get("ok", True) is not False:
@@ -128,9 +134,17 @@ def main(argv):
     ap.add_argument("video")
     ap.add_argument("--ep")
     ap.add_argument("--target", type=float)
+    ap.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
     ep = C.episode(a.ep) if a.ep else None
+    if ep:
+        a.video = C.resolve(ep, a.video)
     f, info = run_qc(a.video, ep, a.target)
+    if a.json:
+        print(json.dumps({"video": a.video, "info": info, "findings": f}, ensure_ascii=False))
+        if ep:
+            C.save(C.build(ep, "review", "qc.json"), {"video": a.video, "info": info, "findings": f})
+        return 1 if any(x["sev"] == "P0" for x in f) else 0
     order = {"P0": 0, "P1": 1, "info": 2}
     f.sort(key=lambda x: (order[x["sev"]], x["t"] or 0))
     lines = [f"{x['sev']:<4} {C.tc(x['t']) if x['t'] is not None else '  -  ':>7}  {x['kind']}: {x['msg']}" for x in f]

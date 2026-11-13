@@ -1310,7 +1310,7 @@ def adopt(ep, f):
          "keep": [{"id": "K001", "src": "adopted", "in": 0.0, "out": round(dur, 3), "first": None, "last": None}]}
     save_edit(ep, e)
     C.say(f"adopted {os.path.basename(f)}: {C.tc(dur)}. build/cut/acut.mp4 and voice.wav are ready.",
-          "next: ./pal transcribe file build/cut/voice.wav -o transcript.json (words on this timeline)")
+          "next: ./pal ingest, ./pal transcribe, then ./pal cut remap (the adopted file is the master: its words are the edited transcript)")
 
 
 def table(ep, show_all):

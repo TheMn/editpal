@@ -73,7 +73,8 @@ All times are seconds. Times in `edit.json` and `plan.json` sit on the project's
 - `conform` files are constant frame rate at the project `fps`, SDR, upright, with a keyframe
   every second; everything downstream reads them, never `file`.
 - `ingest` also records, per source: `wav` (its sound as 48 kHz mono, when it has any), `sheet`
-  (its contact sheet), `sha` (a hash of the original, for caching). Offsets are measured against
+  (its contact sheet), `sha` (a hash of the original, for caching), `v` and `fps` (the conform
+  recipe version and frame rate; a change redoes it). Offsets are measured against
   the master's own sound.
 - A second talking video nearly as long as the master is taken as another camera (`a-roll`),
   not as B-roll.
@@ -101,7 +102,7 @@ All times are seconds. Times in `edit.json` and `plan.json` sit on the project's
 
 ```json
 {
-  "v": 1, "fps": 30, "locked": null, "adopted": false,
+  "v": 1, "fps": 30, "locked": null, "adopted": false, "mode": "natural",
   "rhythm": { "in_sentence": 0.14, "between": 0.42, "beat": 0.75, "noise_floor_db": -58 },
   "keep": [
     { "id": "K001", "src": "camA", "in": 12.433, "out": 19.167, "first": "w31", "last": "w52", "section": "hook" },
@@ -125,7 +126,8 @@ All times are seconds. Times in `edit.json` and `plan.json` sit on the project's
   `ok: false` keeps the material (the creator said `keep C002`).
 - `protect`: ranges that are never trimmed and never clipped into Shorts.
 - `locked`: a hash set by `./pal cut lock` at picture lock; a later change clears it.
-- `adopted: true`: the creator brought their own A-cut; `keep` is one range over that file.
+- `mode`: how tight the pauses were cut (`tight` `natural` `loose`).
+- `adopted: true`: the creator brought their own A-cut; `keep` is one range over that file (`src: "adopted"`).
 
 ### `translation.<lang>.json`
 

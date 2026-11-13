@@ -11,7 +11,8 @@ Languages come from `channel.json → languages.subtitles` unless the creator na
 1. **The video.**
    - An episode made here: `transcript.json` and any `translation.<lang>.json` already exist.
    - Any finished video: make the episode folder, `./pal drive get "<folder>" <ep>`,
-     `./pal ingest <ep>`, `./pal transcribe <ep>`, `./pal cut adopt <ep> <file>` (the timeline
+     `./pal ingest <ep>`, `./pal transcribe <ep>`, `./pal cut adopt <ep> <file>`,
+     `./pal cut remap <ep>` (the timeline
      is the video as it is).
 2. **Check the words** before timing anything. Read `./pal transcribe show <ep>` once: names,
    product and technical terms, numbers. Use the spellings in `channel.md`; add the ones you
@@ -25,7 +26,7 @@ Languages come from `channel.json → languages.subtitles` unless the creator na
    line length, two lines at most, reading speed, time on screen, overlaps. Fix what it lists by
    rewording or splitting the sentence, not by shrinking time.
 5. **Burned in** (only when asked, or for vertical pieces):
-   `./pal subs burn <video> subs/<lang>.srt -o build/out/<slug>.<lang>.subbed.mp4`, then look at
+   `./pal subs burn <video> <ep>/subs/<lang>.srt -o <ep>/build/out/<slug>.<lang>.subbed.mp4`, then look at
    three frames (`./pal sheet frames`): readable at phone size, not over a face or on-screen
    text, Persian joined and right-to-left.
 6. **Deliver.** `./pal drive put <ep> subs/*.srt subs/*.vtt` (and the burned copy). Point to

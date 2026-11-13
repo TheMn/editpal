@@ -18,7 +18,7 @@ what changed; exit code `3` means "needs something from the creator" (the messag
 | `sync <ep>` | lines up every source that has sound against the master by its audio; reports drift | `sources.json` offsets |
 | `transcribe <ep>` | words with times in the spoken language, plus the sounds a transcriber hides (`um`, breaths) and suspect spans. `--lang`, `--source`, `--quick` | `transcript.raw.json` |
 | `transcribe show <ep>` | compact view, one line per sentence. `--raw` (source timeline) / default edited; `--from 60 --to 120`; `--words` | — |
-| `transcribe file <media> -o <json>` | the same for any file | the JSON |
+| `transcribe file <media> -o <json>` | the same for any file (`--lang`, `--quick`, `--prompt`) | the JSON |
 | `restore <ep>` | re-downloads the sources by Drive id and rebuilds `conform/` and `proxy/` | `build/` |
 | `clean <ep>` | deletes caches that can be rebuilt (`--all`: everything in `build/` except `out/`) | — |
 
@@ -32,7 +32,7 @@ what changed; exit code `3` means "needs something from the creator" (the messag
 | `cut verify <ep>` | transcribes the A-cut again and compares with the kept words; checks every seam | `build/review/seams.json`, flags in `edit.json` |
 | `cut remap <ep>` | the transcript on the edited timeline | `transcript.json` |
 | `cut lock <ep>` | picture lock | `edit.json.locked` |
-| `cut adopt <ep> <file>` | use the creator's own A-cut instead | `edit.json` (`adopted`) |
+| `cut adopt <ep> <file>` | use the creator's own A-cut instead (`keep` is one range, `src: "adopted"`) | `edit.json` (`adopted`), `build/cut/acut.mp4`, `voice.wav` |
 | `cut table <ep>` | the cut list as a table | — |
 
 Operations for `cut apply` (a JSON list):
@@ -54,8 +54,8 @@ Operations for `cut apply` (a JSON list):
 | --- | --- |
 | `sheet contact <media> -o <jpg>` | timestamped contact sheet (`--every 20`, `--cols 6`) |
 | `sheet frames <media> --at 12.5,40 -o <dir>` | single frames |
-| `sheet seams <ep>` | one strip per cut: frames either side, waveform, the words (`--flagged`: only flagged ones) |
-| `sheet reel <ep>` | one audio file with ±1.5 s around every cut, numbered |
+| `sheet seams <ep>` | one strip per cut: frames either side, waveform, the words (`--flagged`: only flagged ones; `--only C007`) → `build/review/seams/seam-NNN-<id>.png` |
+| `sheet reel <ep>` | one audio file with ±1.5 s around every cut, numbered → `build/review/seam-reel.m4a` (+ `.json`) |
 
 ## Review pages
 
@@ -85,9 +85,10 @@ inside the file, every item with a visible id, a "copy my notes" button).
 | `subs make <ep>` | subtitles for every language in `channel.json` (spoken from the transcript, others from the translation) | `subs/<lang>.srt`, `.vtt` |
 | `subs lint <file>` | line length, reading speed, duration, overlaps | — |
 | `subs burn <video> <srt> -o <mp4>` | burned-in copy in the brand's caption style (right-to-left safe) | the file |
-| `subs file <media> --lang fa -o <dir>` | subtitles for any finished video, without an episode | `.srt`, `.vtt`, transcript |
-| `music list` / `get <id>` / `preview <id> <mp3>` / `add` | the free music library | cache |
-| `mix <ep>` | the bed (music + effects from `plan.json`) and one mix per language at the loudness target (`--lang`, `--short`) | `build/audio/bed.wav`, `mix.<lang>.wav` |
+| `subs file <media> --lang fa -o <dir> [--quick]` | subtitles for any finished video, without an episode | `.srt`, `.vtt`, transcript |
+| `music list [--mood m]` / `get <id>` / `preview <id or file> <mp3>` / `add <commons-url> --mood m --id id` | the free music library (`library/music/library.json`, a list). `get` checks the SHA-1; exit 3 when Wikimedia asks for a pause (try again later), 2 for an unknown id | `$EDITPAL_CACHE/music/` |
+| `sfx build` / `sfx list` | makes (deterministically, CC0) or lists the effects `mix` uses by id | `library/sfx/<id>.mp3` |
+| `mix <ep>` | the bed (music + effects from `plan.json`) and one mix per language at the loudness target (`--lang`, `--short`) | `build/audio/bed.wav` (+ `bed.music.wav`, `bed.fx.wav`: the parts `mix` re-ducks per language), `mix.<lang>.wav`, `.m4a` |
 
 ## Graphics and the final picture
 
@@ -95,15 +96,17 @@ inside the file, every item with a visible id, a "copy my notes" button).
 | --- | --- | --- |
 | `hf <arguments>` | HyperFrames with telemetry, update checks and account commands switched off | — |
 | `plates time <ep>` | recomputes every beat's time from its word anchors | `plan.json` |
-| `plates stills <ep>` | poses every beat on the real frame and snapshots them all in one run | `build/review/stills/` |
-| `plates render <ep>` | renders the plates one after another; only changed ones (`--only P03,P07`, `--draft`) | `build/plates/` |
+| `plates stills <ep>` | poses every beat on the real frame and snapshots them all in one run (`--only B03,B04`, `--lang`) | `build/review/stills/` |
+| `plates render <ep>` | renders the plates one after another; only changed ones (`--only P03,P07`, `--draft`, `--lang en,fa`, `--range a-b` for a project). `mode: project` renders `hf/index.html` whole | `build/plates/<id>.<lang>.mov/.mp4`, `index.json`, `project.<lang>.mp4` |
+| `plates kits` | lists the kit pieces in `brand/kit/` and their variables | — |
+| `plates kit <name> --vars '{…}' -o <file>` | renders one kit piece alone (`--alpha`, `--lang`, `--dur`, `--size`, `--check` runs `hyperframes check` first, `--video` footage for `pip-frame`) | the file |
 | `brand test` | the 10 s brand test (sting, lower third, caption, end card) | `brand/reference/test.mp4` |
 | `brand check` | the approved reference frames still look the same (`--approve` to accept a new look) | — |
 | `composite <ep> --draft` | plates, B-roll, punch-ins, redactions and captions over the A-cut, with timecode and beat ids burned in; 1080p | `build/out/draft.mp4` |
 | `composite <ep> --final` | the same at source resolution, clean; one audio file per language | `build/out/<slug>.mp4`, `<slug>.<lang>.m4a` |
 | `reframe <video> -o <mp4>` | 9:16 from 16:9: follows the face, or stacks screen and face (`--mode track|center|stack`, `--from/--to`) | the file |
 | `thumb <ep>` | sharp, expressive frame candidates; renders thumbnail options at 1280×720 | `build/out/thumbs/` |
-| `qc <video>` | flash, black and frozen frames, loudness, clipped audio, duration (`--ep` adds seam and caption checks) | report |
+| `qc <video>` | flash, black and frozen frames, loudness, clipped audio, duration (`--ep` adds length and seam checks and writes `build/review/qc.json`; `--target`, `--json`). Exit 1 on any P0 | report |
 | `export <ep> --fcpxml` | the cut as a timeline for DaVinci Resolve, Premiere or Final Cut (`--edl`, `--otio`) | `build/out/<slug>.fcpxml` |
 
 ## Upkeep
@@ -111,5 +114,5 @@ inside the file, every item with a visible id, a "copy my notes" button).
 | Command | Does |
 | --- | --- |
 | `doctor` | checks the machine (ffmpeg, Python, Node, models, disk, fonts), the channel files and how old the upstream pins in `tools/versions.json` are |
-| `test` | builds a small generated clip and runs the whole toolchain on it with assertions |
+| `test [--full]` | builds a small generated clip (`tests/fixture.py`) and runs the whole toolchain on it with assertions: about 2 min by default, about 3 min more with `--full` (voice, dub, a generated video, reframe, thumb, brand) |
 | `update` | pulls improvements from the editpal template into this copy, keeping the channel's own files |

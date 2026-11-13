@@ -16,7 +16,7 @@ dubbed). Specs for each platform are in `formats/_library/short.md`.
    - fits the length the format allows, and is not inside a `protect` range.
    Long video: give a `logger` subagent the transcript in halves and let each return candidates.
    Write the best 5–8 to `build/review/shorts.json` with a still each
-   (`./pal sheet frames build/cut/acut.mp4 --at … -o build/review/shorts/`).
+   (`./pal sheet frames <ep>/build/cut/acut.mp4 --at … -o <ep>/build/review/shorts/`).
 2. **Gate: which ones.** `./pal board shorts <ep>`, show it, wait (`S1 S3`, or `you choose`:
    take the best three).
 3. **For each pick, write:**
@@ -24,7 +24,7 @@ dubbed). Specs for each platform are in `formats/_library/short.md`.
    - the caption and hashtags for YouTube and for Instagram, per language;
    - the end: the last frame holds a beat, or loops back to the first.
 4. **Build 9:16.**
-   - Reframe: `./pal reframe build/cut/acut.mp4 --from a --to b -o …` (`--mode track` follows
+   - Reframe: `./pal reframe <ep>/build/cut/acut.mp4 --from a --to b -o …` (`--mode track` follows
      the face; `--mode stack` for a screen recording with a face camera; content wider than the
      crop: stack it, never squeeze).
    - Captions and hook: a HyperFrames project per Short (`plan.json`-style beats in

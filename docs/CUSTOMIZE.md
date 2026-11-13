@@ -12,7 +12,7 @@ change ("make the accent colour orange", "add a format for my weekly Q&A").
 | a kind of video: how tight the cut, how many graphics, music, what follows | `formats/<name>.md` | nothing |
 | a new kind of video | copy the closest file in `formats/_library/` to `formats/` | nothing |
 | your cloned voice | `/setup` → "here is my voice" | listen to the test |
-| music | add a track: `./pal music add <its Wikimedia Commons page>`; or put tracks you own in Drive `brand/music/` | nothing |
+| music | add a track: `./pal music add <its Wikimedia Commons page> --mood <mood> --id <name>`; or put tracks you own in Drive `brand/music/` | nothing |
 
 ## Languages
 

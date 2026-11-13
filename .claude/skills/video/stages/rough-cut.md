@@ -4,7 +4,8 @@ Everything later sits on this. A cut that sounds wrong makes the whole video fee
 standard is: it plays like one clean take.
 
 **The creator brought their own A-cut** (a file named a-cut / acut, or they say so):
-`./pal cut adopt <ep> <file>`, then step 6.
+`./pal cut adopt <ep> <file>`, `./pal transcribe <ep>`, `./pal cut remap <ep>` (their file is
+the timeline; its words become the edited transcript), then step 6.
 
 1. **The tool's pass.** `./pal cut propose <ep>` (`--tight`, `--natural` or `--loose` from the
    format). It removes the slate, long pauses (toward this speaker's own rhythm), fillers, false

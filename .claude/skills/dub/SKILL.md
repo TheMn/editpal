@@ -18,7 +18,8 @@ Needs a cloned voice for the speaker (`voices/<speaker>/`). None yet: the `setup
    - An already published video: make the episode folder, `./pal drive get "<folder>" <ep>`
      (the audio alone is enough; the creator's own subtitle files make it faster and better),
      `./pal ingest <ep>`, `./pal transcribe <ep>` (background), then
-     `./pal cut adopt <ep> <the video or audio file>` so the timeline is the published one.
+     `./pal cut adopt <ep> <the video or audio file>` and `./pal cut remap <ep>` so the timeline
+     is the published one.
 2. **The translation file.** `./pal dub init <ep> --to <lang>`. If the creator's own subtitles
    in the target language are in the folder, they become the script (their wording, their
    timing) and there is nothing to translate.

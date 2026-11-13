@@ -26,7 +26,7 @@ it as stills **before animating anything**.
    - Things on a screen recording that look private (keys, emails, addresses) → `redact`.
 4. **Sound.** Effects only on entrances that deserve one, soft; none if the channel prefers.
    Music: three options that fit the format's moods (`./pal music list`; make previews with
-   `./pal music preview <id> build/review/music/M1.mp3`), or none if that is the channel's
+   `./pal music preview <id> <ep>/build/review/music/M1.mp3`), or none if that is the channel's
    default. Calm classical under a modern talking video usually sounds wrong: offer it only if
    the channel asked for it.
 5. **Captions.** Long videos: subtitle files, no burn-in, unless the format says otherwise.

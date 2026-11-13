@@ -219,8 +219,8 @@ def finish(pre_wav, out_wav, out_m4a, target, tp, dur):
     """Two-pass loudnorm in linear mode, then the AAC copy; returns the measurement of the result."""
     m = measure(pre_wav, target, tp)
     flt = loudnorm_pass(pre_wav, target, tp, measured=m)
-    common.run(["ffmpeg", "-v", "info", "-hide_banner", "-nostats", "-i", pre_wav, "-af", flt + ",aresample=48000",
-                "-t", f"{dur:.4f}", "-c:a", "pcm_s24le", out_wav])
+    common.run(["ffmpeg", "-v", "info", "-hide_banner", "-nostats", "-i", pre_wav, "-af", flt + f",aresample=48000,apad=pad_dur=1,atrim=end_sample={int(round(dur * 48000))}",
+                "-c:a", "pcm_s24le", out_wav])
     common.run(["ffmpeg", "-i", out_wav, "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out_m4a])
     return measure(out_wav, target, tp)
 

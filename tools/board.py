@@ -413,6 +413,13 @@ def paper_text(pg, E, rem, prot):
     for p in prot:
         if p.get("first") in idx and p.get("last") in idx:
             pr.append((idx[p["first"]], idx[p["last"]], p.get("kind", "")))
+    # a word inside a kept range by its id is kept, whatever the transcriber's timing says
+    # (word times can sit a little late, inside the following silence)
+    kept_ix = set()
+    for k in (E.edit or {}).get("keep", []):
+        a, b = idx.get(k.get("first")), idx.get(k.get("last"))
+        if a is not None and b is not None:
+            kept_ix.update(range(a, b + 1))
     emitted, nxt = set(), 0
     out = []
 
@@ -434,8 +441,8 @@ def paper_text(pg, E, rem, prot):
             act += (f'<button class="chip ctl" data-tok="{esc(r["id"])} looser" type="button">looser</button>'
                     f'<button class="chip ctl" data-tok="{esc(r["id"])} tighter" type="button">tighter</button>')
         img = ""
-        sp = E.p("build/sheets/seams", r["id"] + ".png")
-        if flag and os.path.exists(sp):
+        sp = next(iter(sorted(glob.glob(E.p("build/review/seams", f"seam-*-{r['id']}.png")))), "")
+        if flag and sp:
             img = f'<br>{img_tag(pg, sp, 640, "still", "seam " + r["id"])}'
         return h + f'<span class="why" id="{rid}">{reason}{act}{img}</span>'
 
@@ -457,7 +464,7 @@ def paper_text(pg, E, rem, prot):
             w = words[i]
             flush(mids[i])
             k = bisect.bisect_right(ins, mids[i]) - 1
-            r = rs[k] if k >= 0 and mids[i] < rs[k]["out"] else None
+            r = rs[k] if k >= 0 and mids[i] < rs[k]["out"] and i not in kept_ix else None
             for a, b, kind in pr:
                 if i == a:
                     out.append(f'<span class="chip prot">protected · {esc(kind)}</span>')
@@ -598,8 +605,15 @@ def build_story(E):
         pg.add('<div class="box">No music in the plan.</div>')
     for m in music:
         mp = E.p("build/review/music", f'{m["id"]}.mp3')
+        trk = m.get("track", "")
+        if not os.path.exists(mp) and trk and not trk.startswith("library:") and E.has("sources.json"):
+            try:        # a track from the creator's own sources: a preview is one local ffmpeg call
+                import mix, music
+                music.preview(mix.track_path(E.ep, trk), mp)
+            except SystemExit:
+                pass
         prev = audio_tag(pg, mp, f'music {m["id"]}', 32, droppable=True) if os.path.exists(mp) else \
-            f'<div class="miss">No preview yet. Make it with <code>./pal music preview {esc(m.get("track", ""))} build/review/music/{esc(m["id"])}.mp3</code></div>'
+            f'<div class="miss">No preview yet. Make it with <code>./pal music preview {esc(m.get("track", "").replace("library:", ""))} build/review/music/{esc(m["id"])}.mp3</code></div>'
         pg.add(f'<div class="box"><button class="chip ctl" type="button" data-grp="mus" data-tok="{esc(m["id"])}">{esc(m["id"])}</button> '
                f'<span class="id">{esc(m["id"])}</span> {esc(m.get("track", ""))} · {mmss(m.get("t", [0, total])[0])}-{mmss(m.get("t", [0, total])[1])} · {m.get("gain_db", "")} dB'
                f'{" · ducks under speech" if m.get("duck") else ""}{prev}</div>')

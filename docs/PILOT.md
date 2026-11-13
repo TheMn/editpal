@@ -54,6 +54,29 @@ Run each with review depth `careful`, so every gate shows.
 - Does the library have a track you would actually use? Add non-classical CC0 recordings until
   each mood has at least three.
 
+## Known gaps found while building
+
+Things the build's own checks could not settle. Each is a line to tick during the pilot.
+
+- **Never run on real material:** Persian transcription; HDR, rotated and variable-frame-rate
+  phone footage; a screen recording; two cameras (`angle`); J and L cuts; a recording longer than
+  a few minutes; `./pal restore` with a real download; `./pal update`.
+- **The cut:** the repeat detector was tuned on exact copies of a phrase; a natural retake in
+  different words may only be suggested, not cut. `cut verify` reports "5" against "five" as a
+  clipped word (a false alarm on digits).
+- **Sync:** drift between two devices is probably under-reported; offsets themselves were exact
+  in tests.
+- **Voices:** likeness and accent were never heard by a person. Persian synthetic speech read
+  back with about 1 word in 9 wrong and stumbled on a long sentence. There is no licence-clean
+  stock Persian voice: Persian generated videos need the creator's own clip, or recorded narration.
+- **Dub timing:** the catch-up path for lines that run long was never triggered in tests.
+- **Music:** all 22 library tracks are confirmed CC0 by Wikimedia's own data, but none was
+  downloaded (the site rate-limited the build), so checksums and moods are unverified, and
+  nobody has listened to them.
+- **Drive upload link:** written, never run against Google.
+- **Review pages:** built from a one-minute test; a 20-minute transcript page was not opened on
+  a phone.
+
 ## After the pilot
 
 Every fix goes back into the template, with the numbers above recorded in `docs/RENDERING.md`

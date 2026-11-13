@@ -3,7 +3,7 @@
 Usage:
   ./pal music list [--mood calm]            tracks with mood, length, licence
   ./pal music get <id>                      download (checked by SHA-1) into $EDITPAL_CACHE/music/; prints the path
-  ./pal music preview <id> <out.mp3>        30 s from the middle, faded in and out
+  ./pal music preview <id|file> <out.mp3>   30 s from the middle, faded in and out
   ./pal music add <commons-file-url> --mood <mood> --id <id> [--use "…"] [--performer "…"]
                                             reads the file's page through the Wikimedia Commons API and
                                             adds it to library/music/library.json, but only if its licence is
@@ -73,6 +73,7 @@ def http(url, params=None, binary=False, tries=6):
 
 def get_path(tid):
     """Local file of a track, downloading and verifying it the first time."""
+    tid = tid[8:] if tid.startswith("library:") else tid
     t = find(tid)
     ext = os.path.splitext(urllib.parse.urlparse(t["url"]).path)[1] or ".ogg"
     path = os.path.join(common.CACHE, "music", tid + ext)
@@ -101,8 +102,10 @@ def sha1_of(path):
 
 
 def preview(tid, out):
-    """30 s from the middle of the track, faded, as MP3."""
-    src = get_path(tid)
+    """30 s from the middle of the track, faded, as MP3. `tid` is a library id (or library:<id>) or an audio file."""
+    tid = tid[8:] if tid.startswith("library:") else tid
+    src = tid if os.path.isfile(tid) else get_path(tid)
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     total = common.duration(src)
     start = max(0.0, total / 2 - 15)
     common.run(["ffmpeg", "-ss", f"{start:.2f}", "-t", "30", "-i", src, "-af",
