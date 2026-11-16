@@ -11,9 +11,9 @@ Proving the studio on real footage: [PILOT.md](PILOT.md).
 | | What is missing | Already in place |
 | --- | --- | --- |
 | **Automatic camera switching** | choosing the camera by who is speaking | sources are synced by sound; `edit.json` carries an `angle` per kept range, set by hand today |
-| **Several speakers on one microphone** | telling voices apart on a single track (for separate clones and lower thirds) | one clone per speaker works when each has their own track |
+| **Several speakers on one microphone** | telling voices apart on a single track (for separate clones and lower thirds) | one profile per person (`voices/<name>/`); lines are assigned to speakers by hand or from separate tracks |
 | **Removing music from an old video's sound** | separating voice and music when only a mixed file exists | new videos keep voice and music as separate files from the start |
-| **Dubbing into languages other than English** | a free cloned-voice engine per language | the translation, timing and subtitle steps are language-neutral |
+| **Dubbing into languages outside the list** | a measured engine for languages beyond English, Persian and the 22 the multilingual engine speaks | those fall back to an engine that guesses the language from the text; unmeasured |
 | **Uploading for you** | YouTube and Instagram uploads through their APIs (each needs the creator's own app approval) | `package.md` is paste-ready; `docs/PUBLISH.md` has the clicks |
 | **Learning from results** | reading a channel's analytics to suggest what to make next | `ideas.md`, `notes.md` and standing preferences |
 | **Finding private things on screen by itself** | detecting keys, emails and faces in a screen recording | the `logger` flags what it sees on contact sheets; blurring is one line in the plan |

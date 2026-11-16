@@ -177,7 +177,7 @@ def cmd_voice(a):
     d = C.load(tpath(ep, a.to))
     if d.get("voice") is None:
         C.die("this translation has voice: null (subtitles only); set a speaker name to dub", 3)
-    spk = V.speaker(d["voice"])
+    voices = {d["voice"]: V.speaker(d["voice"])}
     segs, total = d["segments"], float(d["duration"])
     track = np.zeros(int(round(total * V.SR)) + V.SR, dtype=np.float32)
     lines, report, prev, drift = [], [], -1.0, 0.0
@@ -186,7 +186,10 @@ def cmd_voice(a):
         if s.get("skip") or not text:
             continue
         start, allowed = window(segs, i, prev, total)
-        y, note = fit(text, spk, allowed, a.engine, a.to)
+        # a segment may name its own speaker (several people in one video); else the file's "voice"
+        who = s.get("speaker") or d["voice"]
+        voices.setdefault(who, V.speaker(who))
+        y, note = fit(text, voices[who], allowed, a.engine, a.to)
         k = int(round(start * V.SR))
         track[k: k + len(y)] += y[: max(0, len(track) - k)]
         prev = start + len(y) / V.SR

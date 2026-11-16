@@ -9,7 +9,7 @@ everything that happens next. **Find the skill and follow it to the end; stop on
 | set up / change the channel, brand, voice, formats | `setup` |
 | a new video: from a recording in Drive, or from a script with no footage | `video` |
 | an idea, a brief, a script, a teleprompter text | `script` |
-| another language's audio track in the cloned voice (or a fix to one) | `dub` |
+| audio tracks in other languages in the cloned voice (or a fix to one) | `dub` |
 | subtitles for a finished video | `subtitles` |
 | Shorts / Reels | `shorts` |
 | titles, thumbnail, description, chapters, tags | `package` |
@@ -78,7 +78,7 @@ A note changes only what it names. Redo that piece, re-show that piece, keep eve
 | `channel.json`, `channel.md`, `ideas.md` | the channel: links, Drive folder, languages, review depth; tone, terms, preferences; the backlog |
 | `brand/` | `frame.md` (colours, fonts, caption style), `kit/` (reusable graphics), `fonts/`, `reference/` |
 | `formats/` | the kinds of video this channel makes; `_library/` holds all presets |
-| `voices/<speaker>/` | cloned-voice reference clips and how each person speaks |
+| `voices/<speaker>/` | one profile per recurring person: cloned-voice reference clips and how they speak |
 | `library/` | free music (`music/library.json`) and effects (`sfx/`) |
 | `episodes/<yyyy-mm>-<slug>/` | one video: its text files, and `build/` for media |
 | `tools/` | the `./pal` commands, `setup.sh`, pinned models and versions |

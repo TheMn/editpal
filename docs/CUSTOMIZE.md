@@ -12,6 +12,7 @@ change ("make the accent colour orange", "add a format for my weekly Q&A").
 | a kind of video: how tight the cut, how many graphics, music, what follows | `formats/<name>.md` | nothing |
 | a new kind of video | copy the closest file in `formats/_library/` to `formats/` | nothing |
 | your cloned voice | `/setup` → "here is my voice" | listen to the test |
+| another recurring speaker | "add <name> as a speaker" (their sample in Drive `voices/<name>/`) | listen to the test |
 | music | add a track: `./pal music add <its Wikimedia Commons page> --mood <mood> --id <name>`; or put tracks you own in Drive `brand/music/` | nothing |
 
 ## Languages
@@ -19,7 +20,8 @@ change ("make the accent colour orange", "add a format for my weekly Q&A").
 `channel.json → languages`:
 
 - `spoken`: what you say in recordings (`fa`, `en`).
-- `dub`: languages that get an extra audio track in your cloned voice (`["en"]`).
+- `dub`: languages that get an extra audio track in your cloned voice (`["en"]`, or several:
+  `["en", "it"]`). Any language can be the spoken one; Persian is the main case.
 - `subtitles`: languages that get subtitle files.
 - `graphics`: the language of on-screen text: `en`, `fa`, or `per-language` to render the
   picture once per language (two videos instead of one video with two audio tracks).

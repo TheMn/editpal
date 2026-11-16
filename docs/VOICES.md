@@ -15,11 +15,18 @@ person can only be judged by ear: `./pal voice test <speaker>` writes mp3s to li
 
 ## What is pinned
 
-- **English clone: Chatterbox Nano.** Same read-back accuracy as Turbo in our test, faster (2.8x against 3.9x), 1.9 GB
-  against 2.8 GB on disk. Turbo was downloaded, measured and deleted; if it sounds better by ear it works with
-  `chatterbox-tts==0.1.7` from PyPI and the same worker (`nano=False`). Both mark their output with Resemble's
-  inaudible Perth watermark. Upstream `resemble-ai/chatterbox` is retired but public; Nano needs its master branch,
-  so it is pinned by commit `ab55923` (PyPI 0.1.7 has no Nano).
+- **English clone: Chatterbox Turbo (the default).** It is the engine whose results were approved by ear in an
+  earlier project, with the same pinned weights and settings. **Chatterbox Nano** read back just as accurately and
+  is faster (2.8x against 3.9x), but nobody has compared the two by ear, so it is an option, not the default:
+  set `"engine": "chatterbox-nano"` in a speaker's `voice.json` after listening to `./pal voice test`. Both mark
+  their output with Resemble's inaudible Perth watermark. Upstream `resemble-ai/chatterbox` is retired but public;
+  it is pinned by commit `ab55923`.
+- **Other languages: Chatterbox Multilingual** (Arabic, Danish, German, Greek, Spanish, Finnish, French, Hebrew,
+  Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian, Polish, Portuguese, Russian, Swedish, Swahili,
+  Turkish, Chinese), cloning from the same clip. One Italian sentence from an English reference clip read back
+  with 0 of 15 words wrong; that is the only measurement so far. Its documentation warns that a clip in another
+  language can carry that language's accent. Languages outside this list and Persian fall back to MOSS, which
+  takes the language from the text and is unmeasured for them.
 - **Persian speech: MOSS-TTS-Nano**, cloning from a clip (the language is taken from the text). 11% of words
   came back wrong, and a long Persian sentence read back as partly garbled: fine for short lines, listen to everything.
 - **English from a Persian reference clip** stays intelligible with both Nano and MOSS (0 of 50 words wrong).

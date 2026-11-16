@@ -19,8 +19,7 @@
   "chatterbox-nano": {
    "pin": "ResembleAI/chatterbox-nano@71ccd1d; code resemble-ai/chatterbox@ab55923",
    "date": "2026-11-13",
-   "source": "https://github.com/resemble-ai/chatterbox",
-   "note": "upstream is marked retired; the pinned commit keeps working. Look for a maintained successor at each check."
+   "source": "https://github.com/resemble-ai/chatterbox"
   },
   "moss-tts-nano": {
    "pin": "OpenMOSS-Team/MOSS-TTS-Nano-100M-ONNX@f52645c",
@@ -41,6 +40,17 @@
    "pin": "5.2.0",
    "date": "2026-11-13",
    "source": "https://github.com/wkentaro/gdown/releases"
+  },
+  "chatterbox-turbo": {
+   "pin": "ResembleAI/chatterbox-turbo@749d1c1; code resemble-ai/chatterbox@ab55923",
+   "date": "2026-11-16",
+   "source": "https://github.com/resemble-ai/chatterbox",
+   "note": "the default English clone. Upstream is marked retired; the pinned commit keeps working. Look for a maintained successor at each check."
+  },
+  "chatterbox-multilingual": {
+   "pin": "ResembleAI/chatterbox@5bb1f6e (t3_mtl23ls_v2)",
+   "date": "2026-11-16",
+   "source": "https://huggingface.co/ResembleAI/chatterbox"
   }
  }
 }

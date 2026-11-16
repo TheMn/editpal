@@ -33,6 +33,9 @@ Run each with review depth `careful`, so every gate shows.
 
 **Voice**
 - English from a Persian clip vs from an English clip: which did you pick, and why.
+- Turbo (the default) against Nano (faster) by ear: is Nano good enough to switch to?
+- A second dub language (for example Italian): accent, likeness, timing.
+- A video with two speakers, each with their own profile.
 - Persian synthetic voice: usable for a whole video, or narration only by recording?
 - Lines that had to be shortened to fit; lines misread.
 

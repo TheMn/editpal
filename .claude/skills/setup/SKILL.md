@@ -21,8 +21,8 @@ installed on their computer.
 
 Name and links (YouTube, Instagram); what it is about and for whom; how it sounds (three words,
 or "like this video": they paste a link or a transcript); **languages**: what is spoken in
-recordings, whether videos also get an extra audio track in another language in their cloned
-voice, which subtitle languages, and whether on-screen text is English, Persian, or rendered
+recordings, whether videos also get extra audio tracks in other languages in their cloned
+voice (one or several: English, Italian, …), which subtitle languages, and whether on-screen text is English, Persian, or rendered
 once per language.
 
 ## 2. Round two: what they make and how
@@ -39,7 +39,7 @@ recorder); what always follows (subtitles, Shorts, an extra language). Copy each
 
 - **Brand:** colours, fonts, logo. They have them → use them. They do not → derive a look from
   3–5 frames or thumbnails they put in the Drive folder `brand/`, or offer three directions in
-  words and let them pick. Write `brand/frame.md` (every value the kit reads). Fonts must be
+  words from `brand/LOOKS.md` and let them pick or mix. Write `brand/frame.md` (every value the kit reads). Fonts must be
   free to embed (OFL); a Persian font is included when Persian appears on screen.
 - **Captions:** clean line, or bold word-by-word (for vertical pieces); burned in or files only.
 - **Music:** moods they like, or none; only free recordings from `library/music/` or tracks
@@ -64,6 +64,12 @@ with five stills. Notes change `brand/frame.md`; run it again. On "looks right":
 `./pal brand check --approve` (these frames now guard the look).
 
 ## 6. Voice (only if a voice is cloned or generated)
+
+One profile per person who will appear again: the host, a co-host, a recurring guest. Each is a
+folder `voices/<name>/` made once and reused in every later video; list them in
+`channel.json → voices`. A new person can be added any time ("add Sara as a speaker": this step
+for her only). Samples can wait in Drive: a subfolder `voices/<name>/` with any recording of
+that person alone, 20 seconds or more.
 
 1. A recording of the speaker: any raw recording in the Drive folder works, in any language.
    `./pal voice prepare <speaker> <file>` picks the best 6–10 seconds by itself.

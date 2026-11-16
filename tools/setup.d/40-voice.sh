@@ -1,6 +1,7 @@
 # Voices (skipped by `sh tools/setup.sh --no-voice`): .venv-voice holds the speech engines with CPU PyTorch;
-# the pinned models are Chatterbox Nano (English cloning), MOSS-TTS-Nano (Persian and English cloning)
-# and Kokoro (stock English voice), about 3 GB in all.
+# the pinned models are Chatterbox Turbo (English cloning, the default), Chatterbox Nano (a faster English
+# option), Chatterbox Multilingual (cloning in 23 languages), MOSS-TTS-Nano (Persian and other languages)
+# and Kokoro (stock English voice), about 9 GB in all.
 echo "· .venv-voice: speech engines"
 venv .venv-voice
 .venv-voice/bin/python -c 'import torch' 2>/dev/null || pipi .venv-voice/bin/python torch==2.6.0 torchaudio==2.6.0 --index-url $TORCH_CPU
@@ -15,7 +16,9 @@ pipi .venv-voice/bin/python -r tools/requirements-voice-engines.txt
     "$CACHE/spacy/en_core_web_sm-3.7.1-py3-none-any.whl"
   pipi .venv-voice/bin/python --no-deps "$CACHE/spacy/en_core_web_sm-3.7.1-py3-none-any.whl"; }
 echo "· voice models"
+model voice-chatterbox-turbo
 model voice-chatterbox-nano
+model voice-chatterbox-multilingual
 model voice-moss-nano tts
 model voice-moss-nano codec
 model voice-kokoro

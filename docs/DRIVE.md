@@ -7,7 +7,9 @@ editpal reaches exactly one folder of your Google Drive, and nothing else.
 1. Make a folder for the channel. Inside it, one subfolder per video, named however you like
    (`2026-12 Recursion`). Put everything for that video in it: camera files, screen recordings,
    microphone audio, B-roll, notes, a script, your own subtitle files.
-   Optional: a `brand/` subfolder (logo, reference frames, music you own).
+   Optional: a `brand/` subfolder (logo, reference frames, music you own), and a `voices/`
+   subfolder with one folder per recurring speaker holding a recording of them alone (20 seconds
+   or more): their voice profile is made from it once and reused.
 2. Share the channel folder: Share → General access → **Anyone with the link** → Viewer.
    Give the link to `/setup` (it is stored in `channel.json`).
 

@@ -145,6 +145,10 @@ All times are seconds. Times in `edit.json` and `plan.json` sit on the project's
 - Times are on the **edited** timeline. `text` is what the voice says; `read` (optional) is the
   fuller wording for subtitles when `text` had to be shortened to fit its time.
 - `voice: null` means subtitles only, no dub. `skip: true`: not voiced (a filler line).
+- One file per target language (`translation.en.json`, `translation.it.json`, …): a video can be
+  dubbed into several languages, each over the same music-and-effects bed.
+- Several people in one video: a segment may carry `"speaker": "<name>"` (a profile in
+  `voices/`); it is voiced in that person's clone. Segments without it use the file's `voice`.
 
 ### `plan.json`
 
@@ -187,6 +191,16 @@ All times are seconds. Times in `edit.json` and `plan.json` sit on the project's
 "reference": { "en": "en.wav", "fa": "fa.wav" } }`, plus the clips (`<lang>.wav`, 6–10 s) and
 their exact words (`<lang>.txt`). A line in a language without its own clip borrows another and
 may carry its accent. `VOICE.md`: how this person talks and writes.
+
+One folder per person who appears more than once (the host, a co-host, a recurring guest). A
+profile is made once (`./pal voice prepare <name> <recording>`) and reused in every later video;
+`channel.json → voices` lists them, and `"host"` is the default speaker.
+
+Engines (`engine` empty = the default for the language): English → `chatterbox-turbo`
+(`chatterbox-nano` is a faster option); Persian → `moss-nano`; Arabic, Danish, German, Greek,
+Spanish, Finnish, French, Hebrew, Hindi, Italian, Japanese, Korean, Malay, Dutch, Norwegian,
+Polish, Portuguese, Russian, Swedish, Swahili, Turkish, Chinese → `chatterbox-multilingual`;
+any other language → `moss-nano` (unmeasured). The stock voice `stock` is English only.
 
 ### `credits.md`: the licence ledger
 

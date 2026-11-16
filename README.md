@@ -2,7 +2,7 @@
 
 A video studio that lives in a repository and is run by [Claude Code](https://claude.com/claude-code).
 You bring an idea, a script or a raw recording; it does the editor's job: the cut, graphics,
-music, an English track in your own voice, subtitles, Shorts, titles and thumbnails. In Persian
+music, extra language tracks in your own voice, subtitles, Shorts, titles and thumbnails. In Persian
 and English, for YouTube first and Instagram second.
 
 **You see the plan before anything is built.** The cut arrives as a transcript with the removed
@@ -28,7 +28,7 @@ nothing to install on your computer.
 | a video from a recording | `/video 2026-12 Recursion` (your Drive folder's name) | cut → storyboard → draft → final, with subtitles |
 | a video from an idea, nothing recorded | `/script why straits matter` then `/video straits` | script → storyboard → the whole video generated |
 | a script to record yourself | `/script …` and say "I'll record it" | script and teleprompter text |
-| an English track in your voice | `/dub <Drive folder>` | the audio track, subtitles, translated title and description |
+| your video in other languages, in your voice | `/dub <Drive folder>` or `/dub <folder> english italian` | per language: the audio track, subtitles, translated title and description |
 | subtitles for a finished video | `/subtitles <Drive folder>` | `.srt` and `.vtt` in both languages |
 | Shorts and Reels | `/shorts recursion` | vertical clips with captions |
 | titles, thumbnail, description | `/package recursion` | paste-ready text and three thumbnails |

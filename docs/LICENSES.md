@@ -27,7 +27,7 @@ Exact versions: `package-lock.json` and `tools/requirements*.txt`.
 | Model | Used for | Licence of the weights |
 | --- | --- | --- |
 | Whisper large-v3 and small (faster-whisper builds) | transcription | MIT |
-| Chatterbox Nano | your cloned voice in English | MIT. Its audio carries an inaudible watermark marking it as machine-made |
+| Chatterbox Turbo (default), Nano (faster option), Multilingual (23 languages) | your cloned voice in English and in other languages | MIT. Their audio carries an inaudible watermark marking it as machine-made |
 | MOSS-TTS-Nano and its audio codec | cloned voice in Persian and other languages | Apache-2.0 |
 | Kokoro 82M | a stock English voice | Apache-2.0 |
 | YuNet | finding the face when reframing to vertical | MIT |
@@ -41,6 +41,13 @@ What was measured about each voice model, and which were rejected and why: [VOIC
 | Fonts: Inter, Vazirmatn, JetBrains Mono | `brand/fonts/` | SIL Open Font License 1.1 (texts beside the files) |
 | Sound effects | `library/sfx/` | made by `tools/sfx.py`; CC0 |
 | Music | listed in `library/music/library.json`, downloaded on demand | each recording is CC0 or public domain, with its proof page recorded |
+
+## Looked at, not included
+
+[Lemo-Opuscar](https://github.com/lemomo-ai/lemo-opuscar) is a library of film styles for coding
+agents. Its method (a look is a written spec, exact values and a reference film) is how
+`brand/` works here. Its style texts are licensed CC BY-NC (non-commercial), so none of them are
+copied into editpal; `brand/LOOKS.md` is written from scratch.
 
 ## Your videos
 

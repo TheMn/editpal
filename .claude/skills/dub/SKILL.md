@@ -1,7 +1,7 @@
 ---
 name: dub
-description: Make another language's audio track for a video in the speaker's own cloned voice, timed to the original (typically Persian recording → English track), with matching subtitles and translated title and description. Works on a locked cut inside a new video or on an already published video from the Drive folder. Use for "/dub <Drive folder or episode>", "English version", "English audio track", "dub this", and fixes like "line 34 should say …" or "too fast at 3:12".
-argument-hint: <Drive folder name, or an episode> [language, default en]
+description: Make audio tracks in one or several other languages for a video, in each speaker's own cloned voice, timed to the original (typically a Persian recording → English, Italian, …; any language to any other), with matching subtitles and translated title and description. Works on a locked cut inside a new video or on an already published video from the Drive folder. Use for "/dub <Drive folder or episode>", "English version", "English audio track", "dub this", and fixes like "line 34 should say …" or "too fast at 3:12".
+argument-hint: <Drive folder name, or an episode> [languages, default: the channel's]
 ---
 
 # Dub a video into another language
@@ -10,8 +10,19 @@ The picture is not touched. The result is one more audio track for the same vide
 speaker's voice, plus subtitles in that language. Nothing here waits for approval: the creator
 listens and sends fixes; only the lines they name are redone.
 
-Needs a cloned voice for the speaker (`voices/<speaker>/`). None yet: the `setup` skill's
-"Voice" step makes one from this very recording, then come back.
+**Languages:** the ones asked for, else `channel.json → languages.dub`. Each language is its
+own run of steps 2–10 with its own `translation.<lang>.json`; translate them as parallel
+subagents and voice them one after another. English uses the best English engine; 22 other
+languages use the multilingual engine; the rest are unmeasured (`docs/VOICES.md`): say so before
+voicing a language that is not on the list, and voice 20 seconds first for the creator to hear.
+
+**Speakers:** needs a voice profile for each person who speaks (`voices/<name>/`). None yet:
+the `setup` skill's "Voice" step makes one from this very recording (or from a sample the
+creator put in Drive `voices/<name>/`), then come back. More than one person in the video:
+find who says what (separate microphone tracks, or ask the creator once for the pattern: "the
+guest answers, I ask"), and set `"speaker": "<name>"` on each segment that is not the default
+speaker's. A person with no profile and no sample: ask whether to make a profile (they will
+appear again), use the stock voice for their lines, or leave their lines in the original.
 
 1. **The video.**
    - Inside a new video: the cut is locked; `transcript.json` exists. Go to step 2.

@@ -1,7 +1,7 @@
 """Cloned and stock voices: pick a reference clip, test engines, speak a line, voice a script.
 
     ./pal voice prepare <speaker> <media> [--lang fa] [--from 12.5 --to 40]
-    ./pal voice test <speaker> [--engines chatterbox-nano,moss-nano] [--langs en,fa]
+    ./pal voice test <speaker> [--engines chatterbox-turbo,moss-nano] [--langs en,fa]
     ./pal voice say <speaker> --lang en --text "Hello." -o out.wav      (speaker "stock": a stock voice)
     ./pal voice script <ep> [--lang en] [--speaker host]
 
@@ -40,10 +40,14 @@ import common as C  # noqa: E402
 SR = 24000            # sample rate of cached lines
 OUT_SR = 48000        # sample rate of the files handed to the mixer
 CODE_VERSION = 1
-DEFAULT_ENGINE = {"en": "chatterbox-nano", "fa": "moss-nano"}   # used when voice.json names none that speaks the language
-ENGINES = {           # name: (models.json key, worker script, languages, clones a voice from a clip)
+MTL = ["ar", "da", "de", "el", "es", "fi", "fr", "he", "hi", "it", "ja", "ko", "ms", "nl", "no", "pl", "pt", "ru", "sv", "sw", "tr", "zh"]
+# used when voice.json names no engine that speaks the language
+DEFAULT_ENGINE = dict({"en": "chatterbox-turbo", "fa": "moss-nano"}, **{lang: "chatterbox-multilingual" for lang in MTL})
+ENGINES = {           # name: (models.json key, worker script, languages (None = any, detected from the text), clones a voice from a clip)
+    "chatterbox-turbo": ("voice-chatterbox-turbo", "chatterbox_worker.py", ["en"], True),
     "chatterbox-nano": ("voice-chatterbox-nano", "chatterbox_worker.py", ["en"], True),
-    "moss-nano": ("voice-moss-nano", "moss_worker.py", ["en", "fa"], True),
+    "chatterbox-multilingual": ("voice-chatterbox-multilingual", "chatterbox_mtl_worker.py", ["en"] + MTL, True),
+    "moss-nano": ("voice-moss-nano", "moss_worker.py", None, True),
     "kokoro": ("voice-kokoro", "kokoro_worker.py", ["en"], False),
 }
 STOCK = {"name": "stock", "engine": "kokoro", "language": "en", "voice": "af_heart", "speed": 1.0, "seed": 1, "reference": {}}
@@ -201,9 +205,16 @@ def pick_reference(spk, lang):
 def engine_name(spk, lang, override=None):
     """The engine for a line: the override, else the speaker's, else the default for the language."""
     for name in (override, spk.get("engine")):
-        if name in ENGINES and lang in ENGINES[name][2]:
+        if name in ENGINES and speaks(name, lang):
             return name
-    return DEFAULT_ENGINE.get(lang) or C.die(f"no voice engine speaks '{lang}'")
+    # a language no pinned engine lists: MOSS takes the language from the text (quality unmeasured)
+    return DEFAULT_ENGINE.get(lang, "moss-nano")
+
+
+def speaks(engine, lang):
+    """Whether an engine can speak a language (None in its list = any)."""
+    langs = ENGINES[engine][2]
+    return langs is None or lang in langs
 
 
 def model_dir(engine):
@@ -225,7 +236,7 @@ class Worker:
         if not installed(engine):
             C.die(f"voice engine {engine} is not installed: run sh tools/setup.sh", 1)
         m, d = model_dir(engine)
-        args = [d] + (["nano"] if engine.startswith("chatterbox") else [])
+        args = [d] + ({"chatterbox-turbo": ["turbo"], "chatterbox-nano": ["nano"]}.get(engine, []))
         script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "voice_workers", ENGINES[engine][1])
         self.p = subprocess.Popen([os.path.join(C.ROOT, ".venv-voice", "bin", "python"), "-I", script] + args,
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
@@ -275,7 +286,7 @@ def synth(text, lang, spk, engine=None, seed=None, speed=None, say=None, quiet=F
     with tempfile.TemporaryDirectory() as d:
         raw = os.path.join(d, "raw.wav")
         t0 = time.time()
-        _workers[eng].ask({"text": spoken, "ref": rwav, "out": raw, "seed": seed, "voice": spk.get("voice"),
+        _workers[eng].ask({"text": spoken, "ref": rwav, "out": raw, "seed": seed, "voice": spk.get("voice"), "lang": lang,
                            "speed": speed if eng == "kokoro" else 1.0})
         took = time.time() - t0
         y = decode(raw)
@@ -402,7 +413,7 @@ def cmd_test(argv):
     rows, rates = [], {}
     for eng in names:
         for lang in a.langs.split(","):
-            if lang not in ENGINES[eng][2]:
+            if not speaks(eng, lang):
                 continue
             for rl in (sorted(spk["reference"]) if ENGINES[eng][3] else [None]):
                 s2 = dict(spk, reference={rl: spk["reference"][rl]}) if rl else spk
