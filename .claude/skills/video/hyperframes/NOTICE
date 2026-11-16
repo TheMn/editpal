@@ -1,0 +1,7 @@
+The reference files in this folder (format.md, motion.md, captions.md, overlays.md, look.md,
+spec.md, review.md, sound.md, story.md, runtimes.md, types/*.md, lint-validate-inspect.md,
+preview-render.md) are from HyperFrames, https://github.com/heygen-com/hyperframes (version
+0.9.31, the version pinned in package.json), licensed under the Apache License 2.0
+(https://www.apache.org/licenses/LICENSE-2.0). They are copied unchanged, from skills/hyperframes/
+references/ and skills/hyperframes-cli/references/. editpal's own rules are in OVERRIDES.md.
+When the pin in tools/versions.json moves, copy the files again from the new version.

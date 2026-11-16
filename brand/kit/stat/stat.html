@@ -1,0 +1,40 @@
+<template>
+  <style>
+    /*BRAND*/
+    #root { position: absolute; inset: 0; font-family: var(--font-text); }
+    #{{id}}-box { position: absolute; top: calc(var(--u) * 15); inset-inline-end: calc(var(--w) * var(--margin)); background: var(--c-ink);
+      border-radius: calc(var(--w) * var(--radius)); padding: calc(var(--u) * 3.2) calc(var(--u) * 5) calc(var(--u) * 3.6); min-width: calc(var(--w) * 20);
+      overflow: hidden; }
+    #{{id}}-num { font-size: calc(var(--u) * var(--s-stat)); font-weight: var(--display-weight); line-height: 1; color: var(--c-accent);
+      letter-spacing: var(--tracking); direction: ltr; unicode-bidi: isolate; text-align: start; font-variant-numeric: tabular-nums; }
+    #{{id}}-lab { margin-top: calc(var(--u) * 1.6); font-size: calc(var(--u) * var(--s-body)); font-weight: var(--text-weight); color: var(--c-ground); line-height: 1.25; max-width: calc(var(--w) * 26); }
+  </style>
+  <div id="root" data-composition-id="{{id}}" data-width="{{W}}" data-height="{{H}}" lang="{{lang}}" dir="{{dir}}"
+       data-composition-variables='[{"id":"value","type":"string","label":"Number (73%, 1,200, $4.5M)","default":"73%"},{"id":"label","type":"string","label":"Label","default":"what the number measures"}]'>
+    <div id="{{id}}-box" class="clip" data-start="0" data-duration="{{dur}}">
+      <div id="{{id}}-num">0</div>
+      <div id="{{id}}-lab" data-var-text="label"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const D = {{dur}}, S = "{{dir}}" === "rtl" ? -1 : 1, id = "{{id}}";
+      const v = Object.assign({ value: "73%", label: "" }, window.__hyperframes.getVariables());
+      const num = document.getElementById(id + "-num"), lab = document.getElementById(id + "-lab");
+      lab.textContent = v.label; if (!v.label) lab.style.display = "none";
+      const m = String(v.value).match(/^([^0-9]*)([0-9][0-9,]*(?:\.[0-9]+)?)(.*)$/);
+      const tl = gsap.timeline({ paused: true });
+      const ein = "{{ease_in}}", eout = "{{ease_out}}", en = {{enter}}, ex = {{exit}};
+      tl.fromTo("#" + id + "-box", { clipPath: S > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)", duration: en, ease: ein }, 0.1);
+      if (m) {
+        const raw = m[2].replace(/,/g, ""), dec = (raw.split(".")[1] || "").length, target = parseFloat(raw), comma = m[2].indexOf(",") >= 0;
+        const fmt = function (n) { let s = n.toFixed(dec); if (comma) s = Number(s).toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec }); return m[1] + s + m[3]; };
+        const o = { n: 0 }; num.textContent = fmt(0);
+        tl.to(o, { n: target, duration: 1.1, ease: "power3.out", onUpdate: function () { num.textContent = fmt(o.n); } }, 0.3);
+      } else { num.textContent = v.value; tl.fromTo(num, { opacity: 0 }, { opacity: 1, duration: en }, 0.3); }
+      tl.fromTo("#" + id + "-lab", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: en, ease: ein }, 0.55);
+      tl.to("#" + id + "-box", { opacity: 0, duration: ex, ease: eout }, D - ex - 0.05);
+      window.__timelines[id] = tl;
+    })();
+  </script>
+</template>

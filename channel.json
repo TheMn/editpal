@@ -1,0 +1,15 @@
+{
+  "name": "",
+  "youtube": "",
+  "instagram": "",
+  "drive": "",
+  "upload": { "env": "EDITPAL_UPLOAD_URL", "folder": "editpal-out" },
+  "languages": { "spoken": "en", "dub": [], "subtitles": ["en"], "graphics": "en" },
+  "formats": [],
+  "review": "standard",
+  "video": { "fps": 30, "draft_height": 1080 },
+  "loudness": { "long": -16, "short": -14, "true_peak": -1.5 },
+  "music": { "moods": [], "allow": ["CC0", "PD", "own"] },
+  "voices": {},
+  "cue_word": ""
+}

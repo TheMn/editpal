@@ -1,0 +1,43 @@
+<template>
+  <style>
+    /*BRAND*/
+    #root { position: absolute; inset: 0; font-family: var(--font-text); }
+    #root[lang="fa"] { --tracking: 0em; }
+    #{{id}}-box { position: absolute; inset-inline-start: calc(var(--w) * var(--margin)); bottom: calc(var(--u) * 9);
+      display: flex; background: var(--c-ink); border-radius: calc(var(--w) * var(--radius)); overflow: hidden;
+      max-width: calc(var(--w) * 62); }
+    #{{id}}-bar { width: calc(var(--u) * 1); background: var(--c-accent); flex: none; }
+    #{{id}}-txt { padding: calc(var(--u) * 2.2) calc(var(--u) * 3.4); display: flex; flex-direction: column; gap: calc(var(--u) * 0.7); }
+    #{{id}}-name { font-size: calc(var(--u) * var(--s-name)); font-weight: var(--display-weight); line-height: var(--lh);
+      letter-spacing: var(--tracking); color: var(--c-ground); }
+    #{{id}}-role { font-size: calc(var(--u) * var(--s-body) * 0.82); font-weight: var(--text-weight); line-height: 1.25;
+      color: var(--c-ground); opacity: 0.74; }
+  </style>
+  <div id="root" data-composition-id="{{id}}" data-width="{{W}}" data-height="{{H}}" lang="{{lang}}" dir="{{dir}}"
+       data-composition-variables='[{"id":"name","type":"string","label":"Name","default":"Name Surname"},{"id":"role","type":"string","label":"Role","default":"Role"}]'>
+    <div id="{{id}}-box" class="clip" data-start="0" data-duration="{{dur}}">
+      <div id="{{id}}-bar"></div>
+      <div id="{{id}}-txt">
+        <div id="{{id}}-name" data-var-text="name">Name Surname</div>
+        <div id="{{id}}-role" data-var-text="role">Role</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const D = {{dur}}, S = "{{dir}}" === "rtl" ? -1 : 1, id = "{{id}}";
+      const v = Object.assign({ name: "Name Surname", role: "Role" }, window.__hyperframes.getVariables());
+      document.getElementById(id + "-name").textContent = v.name;
+      const role = document.getElementById(id + "-role");
+      role.textContent = v.role; if (!v.role) role.style.display = "none";
+      const tl = gsap.timeline({ paused: true });
+      const ein = "{{ease_in}}", eout = "{{ease_out}}", en = {{enter}}, ex = {{exit}};
+      const hid = S > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)", shown = "inset(0 0 0 0)";
+      tl.fromTo("#" + id + "-box", { clipPath: hid }, { clipPath: shown, duration: en, ease: ein }, 0.1);
+      tl.fromTo("#" + id + "-name", { opacity: 0, x: -28 * S }, { opacity: 1, x: 0, duration: en, ease: ein }, 0.22);
+      tl.fromTo("#" + id + "-role", { opacity: 0, x: -28 * S }, { opacity: 0.74, x: 0, duration: en, ease: ein }, 0.22 + 0.09);
+      tl.to("#" + id + "-box", { clipPath: S > 0 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)", duration: ex, ease: eout }, D - ex - 0.05);
+      window.__timelines[id] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,2 @@
+# A-cut tools (.venv). Exact pins; numpy and soundfile come from requirements.txt.
+Pillow==11.3.0          # HPND (permissive): seam strips drawn by ./pal sheet seams

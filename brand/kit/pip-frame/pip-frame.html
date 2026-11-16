@@ -1,0 +1,47 @@
+<template>
+  <style>
+    /*BRAND*/
+    #root { position: absolute; inset: 0; font-family: var(--font-text); }
+    #{{id}}-bg { position: absolute; inset: 0; background: var(--c-ground); }
+    #{{id}}-in { position: absolute; inset-inline-start: calc(var(--w) * var(--margin)); inset-inline-end: calc(var(--w) * 34); top: 0; bottom: 0;
+      display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u) * 3); color: var(--c-ink); }
+    #{{id}}-title { font-size: calc(var(--u) * var(--s-display) * 0.78); font-weight: var(--display-weight); line-height: var(--lh); letter-spacing: var(--tracking); text-wrap: balance; }
+    #{{id}}-text { font-size: calc(var(--u) * var(--s-body)); font-weight: var(--text-weight); line-height: 1.35; color: var(--c-muted); max-width: calc(var(--w) * 40); }
+    #{{id}}-rule { width: calc(var(--u) * 9); height: calc(var(--u) * 0.9); background: var(--c-accent); transform-origin: left center; }
+    #root[dir="rtl"] #{{id}}-rule { transform-origin: right center; }
+    #{{id}}-wrap { position: absolute; inset-inline-end: calc(var(--w) * 1.5); top: calc(var(--u) * 2.6); width: calc(var(--w) * 24); aspect-ratio: 16 / 9;
+      border-radius: calc(var(--w) * 1.4); overflow: hidden; border: calc(var(--u) * 0.5) solid var(--c-ink); background: var(--c-ink); }
+    #{{id}}-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  </style>
+  <div id="root" data-composition-id="{{id}}" data-width="{{W}}" data-height="{{H}}" lang="{{lang}}" dir="{{dir}}"
+       data-composition-variables='[{"id":"title","type":"string","label":"Title","default":"What this is about"},{"id":"text","type":"string","label":"Supporting line","default":""}]'>
+    <div id="{{id}}-bg" class="clip" data-start="0" data-duration="{{dur}}">
+      <div id="{{id}}-in">
+        <div id="{{id}}-rule"></div>
+        <div id="{{id}}-title" data-var-text="title"></div>
+        <div id="{{id}}-text" data-var-text="text"></div>
+      </div>
+    </div>
+    <div id="{{id}}-wrap">
+      <video id="{{id}}-vid" class="clip" src="{{video}}" data-start="0" data-duration="{{dur}}" data-media-start="{{media_start}}" data-track-index="2" muted playsinline></video>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const D = {{dur}}, S = "{{dir}}" === "rtl" ? -1 : 1, id = "{{id}}";
+      const v = Object.assign({ title: "", text: "" }, window.__hyperframes.getVariables());
+      document.getElementById(id + "-title").textContent = v.title;
+      const tx = document.getElementById(id + "-text"); tx.textContent = v.text; if (!v.text) tx.style.display = "none";
+      const tl = gsap.timeline({ paused: true });
+      const ein = "{{ease_in}}", eout = "{{ease_out}}", en = {{enter}}, ex = {{exit}};
+      tl.fromTo("#" + id + "-bg", { clipPath: S > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)", duration: en, ease: "power3.inOut" }, 0);
+      tl.fromTo("#" + id + "-rule", { scaleX: 0 }, { scaleX: 1, duration: en, ease: ein }, 0.3);
+      tl.fromTo("#" + id + "-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: en, ease: ein }, 0.4);
+      tl.fromTo("#" + id + "-text", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: en, ease: ein }, 0.55);
+      tl.fromTo("#" + id + "-wrap", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: en, ease: ein }, 0.05);
+      tl.to("#" + id + "-bg", { clipPath: S > 0 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)", duration: ex + 0.1, ease: "power3.inOut" }, D - ex - 0.15);
+      tl.to("#" + id + "-wrap", { opacity: 0, duration: ex, ease: eout }, D - ex - 0.1);
+      window.__timelines[id] = tl;
+    })();
+  </script>
+</template>

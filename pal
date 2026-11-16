@@ -1,0 +1,5 @@
+#!/bin/sh
+# editpal's one command. `./pal` lists everything it can do; `./pal <command> --help` explains one.
+ROOT=$(cd "$(dirname "$0")" && pwd)
+[ -x "$ROOT/.venv/bin/python" ] || { echo "editpal is not set up on this machine yet: run  sh tools/setup.sh" >&2; exit 2; }
+exec "$ROOT/.venv/bin/python" "$ROOT/tools/pal.py" "$@"

@@ -1,0 +1,1 @@
+{"about":"A graphic area (title and one supporting line) with the speaker as a rounded picture-in-picture in the top reading-end corner. Needs the speaker footage: {{video}} is filled by plates.py from the A-cut proxy.","alpha":false,"dur":6,"layouts":["pip"],"still":3.0,"video":true,"vars":{"title":"What this is about","text":"One supporting line"}}

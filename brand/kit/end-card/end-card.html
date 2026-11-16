@@ -1,0 +1,39 @@
+<template>
+  <style>
+    /*BRAND*/
+    #root { position: absolute; inset: 0; font-family: var(--font-text); }
+    #{{id}}-bg { position: absolute; inset: 0; background: var(--c-ink); color: var(--c-ground); }
+    #{{id}}-head { position: absolute; inset-inline: calc(var(--w) * var(--margin)); top: calc(var(--u) * 9); }
+    #{{id}}-title { font-size: calc(var(--u) * var(--s-display) * 0.8); font-weight: var(--display-weight); line-height: var(--lh); letter-spacing: var(--tracking); }
+    #{{id}}-sub { margin-top: calc(var(--u) * 1.8); font-size: calc(var(--u) * var(--s-body)); color: var(--c-ground); opacity: 0.74; font-weight: var(--text-weight); }
+    #{{id}}-rule { width: calc(var(--u) * 9); height: calc(var(--u) * 0.9); background: var(--c-accent); margin-bottom: calc(var(--u) * 2.4); transform-origin: left center; }
+    #root[dir="rtl"] #{{id}}-rule { transform-origin: right center; }
+    /* rooms for YouTube end-screen elements (two videos and a subscribe circle): keep them clear */
+    .{{id}}-slot { position: absolute; top: calc(var(--u) * 38); width: calc(var(--w) * 41); aspect-ratio: 16 / 9; border: calc(var(--u) * 0.35) solid var(--c-line); border-radius: calc(var(--w) * var(--radius)); opacity: 0.5; }
+    #{{id}}-s1 { inset-inline-start: calc(var(--w) * 6); } #{{id}}-s2 { inset-inline-end: calc(var(--w) * 6); }
+    #{{id}}-sub-room { position: absolute; top: calc(var(--u) * 78); left: 50%; margin-left: calc(var(--u) * -7); width: calc(var(--u) * 14); height: calc(var(--u) * 14); border-radius: 50%; border: calc(var(--u) * 0.35) solid var(--c-line); opacity: 0.5; }
+  </style>
+  <div id="root" data-composition-id="{{id}}" data-width="{{W}}" data-height="{{H}}" lang="{{lang}}" dir="{{dir}}"
+       data-composition-variables='[{"id":"title","type":"string","label":"Headline","default":"Thanks for watching"},{"id":"sub","type":"string","label":"Line under it","default":"Next: pick a video"}]'>
+    <div id="{{id}}-bg" class="clip" data-start="0" data-duration="{{dur}}">
+      <div id="{{id}}-head"><div id="{{id}}-rule"></div><div id="{{id}}-title" data-var-text="title"></div><div id="{{id}}-sub" data-var-text="sub"></div></div>
+      <div class="{{id}}-slot" id="{{id}}-s1"></div><div class="{{id}}-slot" id="{{id}}-s2"></div><div id="{{id}}-sub-room"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const D = {{dur}}, S = "{{dir}}" === "rtl" ? -1 : 1, id = "{{id}}";
+      const v = Object.assign({ title: "", sub: "" }, window.__hyperframes.getVariables());
+      document.getElementById(id + "-title").textContent = v.title;
+      const sb = document.getElementById(id + "-sub"); sb.textContent = v.sub; if (!v.sub) sb.style.display = "none";
+      const tl = gsap.timeline({ paused: true });
+      const ein = "{{ease_in}}", en = {{enter}};
+      tl.fromTo("#" + id + "-bg", { clipPath: S > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)", duration: en, ease: "power3.inOut" }, 0);
+      tl.fromTo("#" + id + "-rule", { scaleX: 0 }, { scaleX: 1, duration: en, ease: ein }, 0.3);
+      tl.fromTo("#" + id + "-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: en, ease: ein }, 0.4);
+      tl.fromTo("#" + id + "-sub", { opacity: 0, y: 20 }, { opacity: 0.74, y: 0, duration: en, ease: ein }, 0.55);
+      tl.fromTo(".{{id}}-slot, #" + id + "-sub-room", { opacity: 0 }, { opacity: 0.5, duration: 0.5, ease: "power2.out", stagger: 0.12 }, 0.8);
+      window.__timelines[id] = tl;
+    })();
+  </script>
+</template>
